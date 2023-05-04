@@ -1,6 +1,5 @@
 'use strict';
-module.exports = (res, code, message) => {
-  // console.dir({ req, res });
+module.exports = (res, code = 400, message) => {
   res.statusCode = code;
   res.end(`"${message}"`);
 };

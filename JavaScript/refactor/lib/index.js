@@ -2,7 +2,7 @@
 const lib = {};
 [
   'cache',
-  'cookieParser',
+  'headersParser',
   'httpError',
   'logger',
   'createSerializeData',
