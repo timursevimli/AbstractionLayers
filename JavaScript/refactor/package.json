@@ -1,0 +1,16 @@
+{
+  "name": "refactor",
+  "version": "1.2.1",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "eslint .",
+    "start": "node server.js"
+  },
+  "author": "Timur Sevimli",
+  "keywords": [],
+  "license": "ISC",
+  "description": ""
+}
