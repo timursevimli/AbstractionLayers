@@ -1,10 +1,10 @@
 'use strict';
 
-const { cookieParser } = require('../lib/');
+const { headersParser } = require('../lib/');
 module.exports = (req) => {
-  const cookies = cookieParser(req);
+  const headers = headersParser(req);
   const ip = req.connection.remoteAddress;
   return `
-    <h1>Welcome</h1>Your IP: ${ip}<br><pre>${JSON.stringify(cookies)}</pre>
+    <h1>Welcome</h1>Your IP: ${ip}<br><pre>${JSON.stringify(headers)}</pre>
     `;
 };
