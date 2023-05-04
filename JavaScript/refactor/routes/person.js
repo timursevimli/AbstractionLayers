@@ -23,14 +23,14 @@ const getPerson = async () => {
   }
 };
 
-const chunkData = (req) => new Promise((resolve, reject) => {
+const createBuffer = async (req) => {
   const body = [];
-  req.on('data', (chunk) => {
+  for await (const chunk of req) {
     body.push(chunk);
-  });
-  req.on('end', () => resolve(body));
-  req.on('error', reject);
-});
+  }
+  const buffer = Buffer.from(body).toString();
+  return buffer;
+};
 
 const serialize = (obj) => {
   const { serializers } = serialize;
@@ -57,9 +57,8 @@ serialize.serializers = {
 
 const postPerson = async (req) => {
   try {
-    const chunk = await chunkData(req);
-    const data = Buffer.concat(chunk).toString();
-    const person = serialize(JSON.parse(data));
+    const buffer = await createBuffer(req);
+    const person = serialize(JSON.parse(buffer));
     await writeFile(fileName, person);
     return person;
   } catch (error) {
