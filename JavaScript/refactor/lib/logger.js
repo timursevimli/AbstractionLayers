@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = (req) => {
+module.exports = ({ method, url }) => {
   const date = new Date().toISOString();
   setTimeout(() => {
-    console.log([date, req.method, req.url].join('  '));
+    console.log([date, method, url].join('  '));
   }, 0);
 };

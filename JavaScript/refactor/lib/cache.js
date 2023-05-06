@@ -1,23 +1,17 @@
 'use strict';
 
-class Cache {
-  constructor() {
-    this.cache = new Map();
-  }
+const generateKey = ({ url, method, connection }) =>
+  `${url}|${method}|${connection.remoteAddress}`;
 
-  #generateKey(req) {
-    return `${req.url}|${req.method}|${req.connection.remoteAddress}`;
-  }
+const createCache = () => {
+  const data = new Map();
+  return (key, value) => {
+    if (key) {
+      key = generateKey(key);
+      if (value) data.set(key, value);
+      else return data.get(key);
+    }
+  };
+};
 
-  getCache(req) {
-    const key = this.#generateKey(req);
-    return this.cache.get(key);
-  }
-
-  setCache(req, value) {
-    const key = this.#generateKey(req);
-    this.cache.set(key, value);
-  }
-}
-
-module.exports = new Cache();
+module.exports = createCache();

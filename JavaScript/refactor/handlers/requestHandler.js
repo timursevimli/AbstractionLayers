@@ -1,6 +1,11 @@
 'use strict';
 const { home, person } = require('../routes');
-const { createSerializeData, cache, httpError } = require('../lib');
+const {
+  logger,
+  createSerializeData,
+  cache,
+  httpError,
+} = require('../lib');
 
 const currentUser = { name: 'Plato', age: 2371 };
 
@@ -18,23 +23,25 @@ const routes = {
 };
 
 const requestHandler = async (req, res) => {
-  const hasCache = cache.getCache(req);
-  if (!hasCache) {
-    const method = httpMethods[req.method];
-    const route = routes[req.url] || routes['/not-found'];
-    const data = route[method] || route[httpMethods.GET];
-    const serializeData = createSerializeData(req, res);
-    try {
-      const result = await serializeData(data, req, res);
-      cache.setCache(req, result);
-      res.end(result);
-    } catch (error) {
-      httpError(res, 404, 'Temporarily not working...');
-      console.log('Catched Error:', error);
-    }
+  logger(req);
+  const hasCache = cache(req);
+  if (hasCache) {
+    console.log('From cache!');
+    res.end(hasCache);
     return;
   }
-  res.end(hasCache);
+  const method = httpMethods[req.method];
+  const route = routes[req.url] || routes['/not-found'];
+  const data = route[method] || route[httpMethods.GET];
+  const serializeData = createSerializeData(req, res);
+  try {
+    const result = await serializeData(data, req, res);
+    cache(req, result);
+    res.end(result);
+  } catch (error) {
+    httpError(res, 404, 'Temporarily not working...');
+    console.log('Catched Error:', error);
+  }
 };
 
 module.exports = requestHandler;

@@ -1,11 +1,9 @@
 'use strict';
-const lib = {};
-[
-  'cache',
-  'headersParser',
-  'httpError',
-  'logger',
-  'createSerializeData',
-  'files',
-].forEach((name) => lib[name] = require(`./${name}.js`));
-module.exports = lib;
+module.exports = {
+  cache: require('./cache.js'),
+  headersParser: require('./headersParser.js'),
+  httpError: require('./httpError.js'),
+  logger: require('./logger.js'),
+  createSerializeData: require('./createSerializeData.js'),
+  files: require('./files.js')
+};

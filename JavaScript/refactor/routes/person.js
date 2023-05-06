@@ -23,15 +23,6 @@ const getPerson = async () => {
   }
 };
 
-const createBuffer = async (req) => {
-  const body = [];
-  for await (const chunk of req) {
-    body.push(chunk);
-  }
-  const buffer = Buffer.from(body).toString();
-  return buffer;
-};
-
 const serialize = (obj) => {
   const { serializers } = serialize;
   const type = typeof obj;
@@ -55,11 +46,24 @@ serialize.serializers = {
   }
 };
 
+const createBuffer = async (req) => {
+  const body = [];
+  for await (const chunk of req) {
+    body.push(chunk);
+  }
+  const buffer = Buffer.from(body).toString();
+  return buffer;
+};
+
 const postPerson = async (req) => {
   try {
-    const buffer = await createBuffer(req);
-    const person = serialize(JSON.parse(buffer));
+    //TODO Вовращается вервый await и ресолвит этот кейс, разобратся с задачей!
+    // const buffer = await createBuffer(req);
+    // console.log(buffer);
+    // const person = serialize(JSON.parse(buffer));
+    const person = JSON.stringify({ 'name': 'Timur', 'age': '25' });
     await writeFile(fileName, person);
+    console.log({ person });
     return person;
   } catch (error) {
     throw error;

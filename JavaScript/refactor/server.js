@@ -1,12 +1,10 @@
 'use strict';
 const http = require('node:http');
 const config = require('./configs/config');
-const { logger } = require('./lib');
 const { requestHandler } = require('./handlers');
 
-const createServer = ({ port }) => {
+const createServer = ({ port = 3000 }) => {
   const server = http.createServer();
-  server.on('request', logger);
   server.on('request', requestHandler);
   server.on('listening', () => {
     console.log(`Server is running on port: { ${port} }`);
