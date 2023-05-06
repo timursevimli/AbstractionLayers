@@ -4,6 +4,6 @@ module.exports = {
   headersParser: require('./headersParser.js'),
   httpError: require('./httpError.js'),
   logger: require('./logger.js'),
-  createSerializeData: require('./createSerializeData.js'),
+  serializeData: require('./serializeData.js'),
   files: require('./files.js')
 };

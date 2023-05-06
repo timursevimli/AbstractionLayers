@@ -51,19 +51,15 @@ const createBuffer = async (req) => {
   for await (const chunk of req) {
     body.push(chunk);
   }
-  const buffer = Buffer.from(body).toString();
+  const buffer = Buffer.concat(body).toString();
   return buffer;
 };
 
 const postPerson = async (req) => {
   try {
-    //TODO Вовращается вервый await и ресолвит этот кейс, разобратся с задачей!
-    // const buffer = await createBuffer(req);
-    // console.log(buffer);
-    // const person = serialize(JSON.parse(buffer));
-    const person = JSON.stringify({ 'name': 'Timur', 'age': '25' });
+    const buffer = await createBuffer(req);
+    const person = serialize(JSON.parse(buffer));
     await writeFile(fileName, person);
-    console.log({ person });
     return person;
   } catch (error) {
     throw error;

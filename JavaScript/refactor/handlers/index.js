@@ -1,4 +1,4 @@
 'use strict';
 module.exports = {
-  requestHanler: require('./requestHanler.js')
+  requestHandler: require('./requestHandler.js')
 };

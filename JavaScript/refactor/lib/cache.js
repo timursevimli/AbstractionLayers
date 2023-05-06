@@ -1,7 +1,7 @@
 'use strict';
 
-const generateKey = ({ url, method, connection }) =>
-  `${url}|${method}|${connection.remoteAddress}`;
+const generateKey = ({ url, method, remoteAddress }) =>
+  `${url}|${method}|${remoteAddress}`;
 
 const createCache = () => {
   const data = new Map();

@@ -1,11 +1,6 @@
 'use strict';
-const { home, person } = require('../routes');
-const {
-  logger,
-  createSerializeData,
-  cache,
-  httpError,
-} = require('../lib');
+const { home, person, notFound } = require('../routes');
+const { logger, serializeData, cache, httpError, } = require('../lib');
 
 const currentUser = { name: 'Plato', age: 2371 };
 
@@ -19,23 +14,25 @@ const routes = {
   '/user': [person.getPerson, person.postPerson],
   '/user/name': [() => currentUser.name],
   '/user/age': [() => currentUser.age],
-  '/not-found': ['<h1>404 Page not found!</h1>'],
+  '/not-found': [notFound],
 };
 
+const createCleanObject = (obj) => Object.assign(Object.create(null), obj);
+
 const requestHandler = async (req, res) => {
-  logger(req);
-  const hasCache = cache(req);
+  const { method, url, connection: { remoteAddress } } = req;
+  const reqInfo = createCleanObject({ method, url, remoteAddress });
+  logger(reqInfo);
+  const hasCache = cache(reqInfo);
   if (hasCache) {
-    console.log('From cache!');
     res.end(hasCache);
     return;
   }
-  const method = httpMethods[req.method];
-  const route = routes[req.url] || routes['/not-found'];
-  const data = route[method] || route[httpMethods.GET];
-  const serializeData = createSerializeData(req, res);
+  const METHOD = httpMethods[method];
+  const route = routes[url] || routes['/not-found'];
+  const data = route[METHOD] || route[httpMethods['GET']];
   try {
-    const result = await serializeData(data, req, res);
+    const result = await serializeData(req, res, data);
     cache(req, result);
     res.end(result);
   } catch (error) {
