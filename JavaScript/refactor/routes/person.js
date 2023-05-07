@@ -51,7 +51,7 @@ const createBuffer = async (req) => {
   for await (const chunk of req) {
     body.push(chunk);
   }
-  const buffer = Buffer.concat(body).toString();
+  const buffer = Buffer.from(body + '');
   return buffer;
 };
 
