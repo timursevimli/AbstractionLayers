@@ -1,6 +1,7 @@
 'use strict';
 
 const { headersParser } = require('../lib/');
+
 module.exports = (req) => {
   const headers = headersParser(req);
   const ip = req.connection.remoteAddress;

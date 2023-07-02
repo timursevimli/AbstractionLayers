@@ -1,4 +1,5 @@
 'use strict';
+
 const path = require('node:path');
 const { readFile, writeFile } = require('../lib/').files;
 
