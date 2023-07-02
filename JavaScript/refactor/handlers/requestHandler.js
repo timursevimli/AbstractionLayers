@@ -17,11 +17,11 @@ const routes = {
   '/not-found': [notFound],
 };
 
-const createCleanObject = (obj) => Object.assign(Object.create(null), obj);
+const cloneObj = (obj) => Object.assign(Object.create(null), obj);
 
 const requestHandler = async (req, res) => {
   const { method, url, connection: { remoteAddress } } = req;
-  const reqInfo = createCleanObject({ method, url, remoteAddress });
+  const reqInfo = cloneObj({ method, url, remoteAddress });
   logger(reqInfo);
   const hasCache = cache(reqInfo);
   if (hasCache) {

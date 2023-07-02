@@ -1,4 +1,5 @@
 'use strict';
+
 const AsyncFunction = Object.getPrototypeOf(async () => { }).constructor;
 const serializeData = (req, res, data) => new Promise((resolve, reject) => {
   const next = (data) => {
