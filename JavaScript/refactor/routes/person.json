@@ -1,1 +1,6 @@
-{"name" : "Isaac","surname" : "Newton","born" : "1643"}
+{
+    "age": "18",
+    "name": "Marcus",
+    "born": "Rome",
+    "Spec": "IT"
+}

@@ -14,25 +14,27 @@ const calculateAge = (birth) => {
 const fileName = path.join(__dirname, 'person.json');
 
 const getPerson = async () => {
-  try {
-    const data = await readFile(fileName);
-    const { name, birth } = JSON.parse(data);
-    const age = calculateAge(birth);
-    return { name, age };
-  } catch (error) {
-    throw error;
+  const data = await readFile(fileName);
+  if (!data) {
+    const msg = 'Person is not found!';
+    throw new Error(msg);
   }
+  const { name, birth } = JSON.parse(data);
+  const age = calculateAge(birth);
+  return { name, age };
 };
 
 const serialize = (obj) => {
-  const { serializers } = serialize;
+  if (Buffer.isBuffer(obj)) {
+    obj = obj.toString('utf8');
+  }
   const type = typeof obj;
-  const serializer = serializers[type];
+  const serializer = serialize[type];
   return serializer(obj);
 };
 
-serialize.serializers = {
-  string: (s) => `${s.trim()}`,
+const serializers = {
+  string: (s) => `${s}`,
   number: (n) => n.toString(),
   object: (o) => {
     if (Array.isArray(o)) return `[${o}]`;
@@ -47,24 +49,22 @@ serialize.serializers = {
   }
 };
 
+Object.assign(serialize, serializers);
+
 const createBuffer = async (req) => {
   const body = [];
   for await (const chunk of req) {
     body.push(chunk);
   }
-  const buffer = Buffer.from(body + '');
+  const buffer = Buffer.concat(body);
   return buffer;
 };
 
 const postPerson = async (req) => {
-  try {
-    const buffer = await createBuffer(req);
-    const person = serialize(JSON.parse(buffer));
-    await writeFile(fileName, person);
-    return person;
-  } catch (error) {
-    throw error;
-  }
+  const buffer = await createBuffer(req);
+  const person = serialize(buffer);
+  await writeFile(fileName, person);
+  return person;
 };
 
 module.exports = { getPerson, postPerson };
