@@ -5,10 +5,9 @@ const serializeData = (req, res, data) => new Promise((resolve, reject) => {
   const next = (data) => {
     if (data instanceof AsyncFunction) {
       const { asyncFunction } = serializeData;
-      asyncFunction(data, req, res)
+      return void asyncFunction(data, req, res)
         .then(resolve)
         .catch(reject);
-      return;
     }
     const type = typeof data;
     const serialize = serializeData[type];
